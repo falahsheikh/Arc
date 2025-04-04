@@ -1,0 +1,1499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arc</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    body {
+        padding: 1rem;
+        background-color: #f5f5f5;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .card {
+        background: white;
+        border-radius: 0.5rem;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        margin-bottom: 1.5rem;
+    }
+
+    .card-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .card-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-right: 93%; 
+        @media (max-width: 1200px) {
+        margin-right: 2%;
+        font-size: 1.1rem;
+    }
+
+    @media (max-width: 768px) {
+        margin-right: 0;
+        font-size: 1rem;
+        align-items: flex-start;
+        margin-right: 75%;
+    }
+
+    @media (max-width: 480px) {
+        font-size: 1.5rem;
+    }
+}
+
+
+    .filters {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .search-container {
+        position: relative;
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 0.5rem;
+        top: 47%;
+        transform: translateY(-50%);
+        color: #6b7280;
+    }
+
+    select {
+        width: 100%;
+        padding: 0.5rem 2rem 0.5rem 2rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.375rem;
+        background-color: white;
+    }
+    input {
+        width: 100%;
+        padding: 0.5rem 2rem 0.9rem 2rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.375rem;
+        background-color: white;
+        align-items: center;
+        padding-top: 13px;
+        padding-left: 35px;
+    }
+
+    .topic-columns {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .topic-container {
+        border: 1px solid #e5e7eb;
+        border-radius: 0.5rem;
+        padding: 1rem;
+        background-color: white;
+        flex: 1;
+        min-width: 300px;
+        max-width: calc(33.333% - 1rem);
+        margin-bottom: 1rem;
+    }
+
+    .topic-header {
+        font-weight: 600;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .paper-card {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.5rem;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        cursor: move;
+        transition: all 0.2s ease;
+        position: relative;
+    }
+
+    .paper-card.to-read {
+        background-color: #fef9c3;
+    }
+
+    .paper-card.reading {
+        background-color: #dbeafe;
+    }
+
+    .paper-card.read {
+        background-color: #dcfce7;
+    }
+
+    .paper-card:hover {
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        transform: translateY(-2px);
+    }
+
+    .paper-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 0.5rem;
+    }
+
+    .paper-actions {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    button {
+        padding: 0.375rem 0.75rem;
+        border-radius: 0.375rem;
+        border: 1px solid #e5e7eb;
+        background-color: white;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    button:hover {
+        background-color: #f3f4f6;
+    }
+
+    .tag {
+        display: inline-block;
+        background-color: #e5e7eb;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        font-size: 0.75rem;
+        margin-right: 0.25rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .add-paper-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5rem;
+        border-radius: 0.375rem;
+        background-color: #f3f4f6;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .add-paper-button:hover {
+        background-color: #e5e7eb;
+        transform: scale(1.05);
+    }
+
+    .paper-form {
+        position: relative;
+        background: #f3f4f6;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 1rem;
+        margin-top: 1rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .form-buttons {
+        display: flex;
+        gap: 8px;
+        margin-top: 8px;
+    }
+
+    .stats-container {
+        margin-top: 2rem;
+        padding: 1.5rem;
+        background: white;
+        border-radius: 0.5rem;
+        border: 1px solid #e5e7eb;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .stat-card {
+        background: #f9fafb;
+        border-radius: 0.5rem;
+        padding: 1rem;
+        text-align: center;
+    }
+
+    .stat-value {
+        font-size: 2rem;
+        font-weight: bold;
+        margin: 0.5rem 0;
+    }
+
+    .stat-label {
+        color: #6b7280;
+        font-size: 0.875rem;
+    }
+
+    .topic-name {
+        cursor: pointer;
+        font-weight: 600;
+        color: #1f2937;
+    }
+
+    .paper-link {
+        color: #3b82f6;
+        text-decoration: none;
+        font-size: 0.875rem;
+        display: inline-block;
+        margin-top: 0.5rem;
+    }
+
+    .paper-link:hover {
+        text-decoration: underline;
+    }
+
+    .current-status-tooltip {
+        position: fixed;
+        background-color: #333;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 14px;
+        pointer-events: none;
+        z-index: 1000;
+        display: none;
+        max-width: 200px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .tag-selector-container {
+        background: white;
+        border-radius: 0.5rem;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border: 1px solid #e5e7eb;
+    }
+
+    .tag-search-container {
+        position: relative;
+        margin-bottom: 0.5rem;
+    }
+
+    .tag-selector {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        margin-top: 0.5rem;
+    }
+
+    .tag-checkbox {
+        display: none;
+    }
+
+    .tag-label {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.25rem 0.75rem;
+        background-color: #e5e7eb;
+        border-radius: 9999px;
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .tag-checkbox:checked + .tag-label {
+        background-color: #3b82f6;
+        color: white;
+    }
+
+    .tag-actions {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+    }
+
+    .add-topic-section {
+        width: 100%;
+        text-align: center;
+        margin-top: 1rem;
+    }
+
+    .add-topic-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background-color: #f3f4f6;
+        border-radius: 0.375rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .add-topic-btn:hover {
+        background-color: #e5e7eb;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.5);
+        z-index: 2000;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-content {
+        background-color: white;
+        border-radius: 0.5rem;
+        width: 90%;
+        max-width: 600px;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .modal-header {
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #e5e7eb;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .modal-body {
+        padding: 1.5rem;
+    }
+
+    .modal-close {
+        cursor: pointer;
+        font-size: 1.5rem;
+        line-height: 1;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    .form-group label {
+        margin-top: 0.5rem;
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.375rem;
+    }
+
+    .form-group textarea {
+        min-height: 100px;
+    }
+
+    .tag-search-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background-color: #f3f4f6;
+        border-radius: 0.375rem;
+        cursor: pointer;
+    }
+
+    .tag-search-btn:hover {
+        background-color: #e5e7eb;
+    }
+
+    .tag-dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .tag-dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: white;
+        min-width: 200px;
+        max-height: 300px;
+        overflow-y: auto;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.375rem;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        z-index: 100;
+        padding: 0.5rem;
+        right: 0;
+    }
+
+    .tag-dropdown-item {
+        padding: 0.5rem;
+        cursor: pointer;
+        border-radius: 0.25rem;
+    }
+
+    .tag-dropdown-item:hover {
+        background-color: #f3f4f6;
+    }
+
+    .tag-dropdown-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.4rem 0.9rem;
+        background-color: #f3f4f6;
+        border-radius: 35%;
+        cursor: pointer;
+    }
+
+    .tag-dropdown-btn:hover {
+        background-color: #e5e7eb;
+    }
+
+    .show {
+        display: block;
+    }
+
+    .add-paper-tooltip {
+        position: fixed;
+        background-color: #333;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 14px;
+        pointer-events: none;
+        z-index: 1000;
+        display: none;
+        max-width: 200px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    @media (max-width: 1024px) {
+        .topic-container {
+            max-width: calc(50% - 1rem);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .filters {
+            grid-template-columns: 1fr;
+        }
+        
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .topic-container {
+            max-width: 100%;
+        }
+    }
+
+        @keyframes statUpdate {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); color: #4CAF50; }
+        100% { transform: scale(1); }
+    }
+
+    .stat-value {
+        transition: all 0.3s ease;
+    }
+
+    .stat-value.updated {
+        animation: statUpdate 0.5s ease;
+    }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title">
+                <span class="material-symbols-outlined">school</span>
+                Arc
+            </div>
+        </div>
+        <div class="card-content" style="padding: 1.5rem;">
+            <div class="filters">
+                <div class="search-container">
+                    <span class="material-symbols-outlined search-icon">search</span>
+                    <input type="text" id="search" placeholder="Search papers...">
+                </div>
+                <select id="status-filter">
+                    <option value="all">All Papers</option>
+                    <option value="to-read">To Read</option>
+                    <option value="reading">Reading</option>
+                    <option value="read">Read</option>
+                </select>
+                <button class="tag-search-btn" onclick="toggleTagSelector()">
+                    <span class="material-symbols-outlined">tag</span>
+                    Filter by Tags
+                </button>
+            </div>
+
+            <div class="tag-selector-container" id="tag-selector-container" style="display: none;">
+                <div class="tag-search-container">
+                    <span class="material-symbols-outlined search-icon">search</span>
+                    <input type="text" id="tag-search-input" placeholder="Filter tags...">
+                </div>
+                <div class="tag-selector" id="tag-selector"></div>
+                <div class="tag-actions">
+                    <button onclick="clearTagFilter()">Clear</button>
+                </div>
+            </div>
+
+            <div class="topic-columns" id="topic-columns"></div>
+
+            <div class="add-topic-section">
+                <div class="add-topic-btn" onclick="addNewTopic()">
+                    <span class="material-symbols-outlined">add</span>
+                    Add New Topic
+                </div>
+            </div>
+
+            <div class="stats-container">
+                <h3>Reading Statistics</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="total-papers">0</div>
+                        <div class="stat-label">Total Papers</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="to-read-counter">0</div>
+                        <div class="stat-label">To Read</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="papers-read">0</div>
+                        <div class="stat-label">Completed</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="reading-progress">0%</div>
+                        <div class="stat-label">Progress</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 2rem; display: flex; align-items: center; justify-content: space-between;">
+                <button onclick="generateSharableLink()">Generate Sharable Link</button>
+                <button onclick="resetTracker()">Reset</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="current-status-tooltip" id="current-status-tooltip"></div>
+    <div class="add-paper-tooltip" id="add-paper-tooltip"></div>
+
+    <div class="modal" id="paper-details-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Paper Details</h3>
+                <span class="modal-close" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body" id="paper-details-content"></div>
+        </div>
+    </div>
+
+<script>
+let papers = [];
+let allTags = new Set();
+let draggedPaperId = null;
+let selectedTags = new Set();
+
+function setupUnsavedChangesWarning() {
+    window.addEventListener('beforeunload', (e) => {
+        if (!hasUnsavedChanges) return;
+        
+        e.preventDefault();
+        e.returnValue = ''; 
+        return ''; 
+    });
+}
+
+function toggleTagSelector() {
+    const container = document.getElementById('tag-selector-container');
+    container.style.display = container.style.display === 'none' ? 'block' : 'none';
+}
+
+function initializePapers() {
+    papers = [];
+    allTags = new Set();
+    updateTags();
+    updateTagSelector();
+    updateCounters();
+    renderPapers();
+}
+
+function updateTagSelector() {
+    const tagSelector = document.getElementById('tag-selector');
+    tagSelector.innerHTML = '';
+    
+    Array.from(allTags).sort().forEach(tag => {
+        const checkboxId = `tag-${tag.replace(/\s+/g, '-')}`;
+        const wrapper = document.createElement('div');
+        wrapper.innerHTML = `
+            <input type="checkbox" id="${checkboxId}" class="tag-checkbox" value="${tag}">
+            <label for="${checkboxId}" class="tag-label">${tag}</label>
+        `;
+        tagSelector.appendChild(wrapper);
+        
+        if (selectedTags.has(tag)) {
+            wrapper.querySelector('.tag-checkbox').checked = true;
+        }
+    });
+}
+
+function updateTags() {
+    allTags = new Set();
+    papers.forEach(paper => {
+        if (paper.tags && paper.tags.length > 0) {
+            paper.tags.forEach(tag => allTags.add(tag));
+        }
+    });
+}
+
+function renderPapers() {
+    const searchTerm = document.getElementById('search').value.toLowerCase();
+    const selectedStatus = document.getElementById('status-filter').value;
+
+    const filtered = papers.filter(paper => {
+        const matchesSearch = paper.id.toLowerCase().includes(searchTerm) || 
+                            paper.title.toLowerCase().includes(searchTerm) ||
+                            paper.authors.toLowerCase().includes(searchTerm) ||
+                            (paper.notes && paper.notes.toLowerCase().includes(searchTerm));
+        
+        const matchesStatus = selectedStatus === 'all' || paper.status === selectedStatus;
+        
+        const matchesTags = selectedTags.size === 0 || 
+                          (paper.tags && 
+                           Array.from(selectedTags).every(tag => 
+                               paper.tags.includes(tag)
+                           ));
+        
+        return matchesSearch && matchesStatus && matchesTags;
+    });
+
+    const topicColumns = document.getElementById('topic-columns');
+    topicColumns.innerHTML = '';
+
+    const allTopics = [...new Set(papers.map(paper => paper.topic))];
+    
+    if (window.newlyCreatedTopic && !allTopics.includes(window.newlyCreatedTopic)) {
+        allTopics.push(window.newlyCreatedTopic);
+    }
+    
+    if (allTopics.length === 0) {
+        topicColumns.innerHTML = '<div style="width: 100%; text-align: center; padding: 2rem; color: #6b7280;">No topics yet. Click "Add New Topic" to get started.</div>';
+        updateStatistics();
+        return;
+    }
+    
+    const columns = [];
+    for (let i = 0; i < allTopics.length; i += 3) {
+        columns.push(allTopics.slice(i, i + 3));
+    }
+    
+    columns.forEach(columnTopics => {
+        const columnDiv = document.createElement('div');
+        columnDiv.style.display = 'flex';
+        columnDiv.style.gap = '1rem';
+        columnDiv.style.width = '100%';
+        
+        columnTopics.forEach(topic => {
+            const topicContainer = document.createElement('div');
+            topicContainer.className = 'topic-container';
+            topicContainer.dataset.topic = topic;
+            topicContainer.ondrop = handleDrop;
+            topicContainer.ondragover = allowDrop;
+            
+            const topicHeader = document.createElement('div');
+            topicHeader.className = 'topic-header';
+            
+            const topicNameSpan = document.createElement('span');
+            topicNameSpan.className = 'topic-name';
+            topicNameSpan.textContent = topic;
+            topicNameSpan.onclick = (e) => {
+                if (e.target === topicNameSpan) {
+                    startRenamingTopic(topicContainer, topic);
+                }
+            };
+            
+            topicHeader.appendChild(topicNameSpan);
+            
+            const addButton = document.createElement('div');
+            addButton.className = 'add-paper-button';
+            addButton.innerHTML = '<span class="material-symbols-outlined">add</span>';
+            addButton.onclick = () => addPaperToTopic(topic);
+            
+            addButton.addEventListener('mousemove', (e) => {
+                const tooltip = document.getElementById('cursor-tooltip');
+                tooltip.textContent = 'Add paper to this topic';
+                tooltip.style.display = 'block';
+                tooltip.style.top = `${e.clientY + 15}px`;
+                tooltip.style.left = `${e.clientX + 15}px`;
+            });
+            
+            addButton.addEventListener('mouseleave', () => {
+                document.getElementById('cursor-tooltip').style.display = 'none';
+            });
+            
+            topicHeader.appendChild(addButton);
+            topicContainer.appendChild(topicHeader);
+            
+            const topicPapers = filtered.filter(paper => paper.topic === topic);
+            
+            if (topicPapers.length === 0) {
+                const emptyMessage = document.createElement('div');
+                emptyMessage.style.textAlign = 'center';
+                emptyMessage.style.padding = '1rem';
+                emptyMessage.style.color = '#6b7280';
+                emptyMessage.textContent = 'No papers in this topic yet';
+                topicContainer.appendChild(emptyMessage);
+            } else {
+                topicPapers.forEach(paper => {
+                    const paperCard = createPaperCard(paper);
+                    topicContainer.appendChild(paperCard);
+                });
+            }
+            
+            columnDiv.appendChild(topicContainer);
+        });
+        
+        topicColumns.appendChild(columnDiv);
+    });
+
+    updateCounters();
+    updateStatistics();
+}
+
+function createPaperCard(paper) {
+    const card = document.createElement('div');
+    card.className = `paper-card ${paper.status}`;
+    card.draggable = true;
+    card.dataset.id = paper.id;
+    card.ondragstart = (e) => {
+        draggedPaperId = paper.id;
+        e.dataTransfer.setData('text/plain', paper.id);
+    };
+
+    const tagsHtml = paper.tags && paper.tags.length > 0 
+        ? `<div class="tags">${paper.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}</div>`
+        : '';
+
+    const authorsYear = `${paper.authors} (${paper.year})`;
+    const linkHtml = paper.link 
+        ? `<a href="${paper.link}" target="_blank" class="paper-link">View Paper</a>`
+        : '';
+
+    card.innerHTML = `
+        <div class="paper-header">
+            <div>
+                <h4>${paper.title}</h4>
+                <p style="color: #6b7280; font-size: 0.875rem;">${authorsYear}</p>
+            </div>
+        </div>
+        ${tagsHtml}
+        ${linkHtml}
+        <div class="paper-actions">
+            <select onchange="updateStatus('${paper.id}', this.value)">
+                <option value="to-read" ${paper.status === 'to-read' ? 'selected' : ''}>To Read</option>
+                <option value="reading" ${paper.status === 'reading' ? 'selected' : ''}>Reading</option>
+                <option value="read" ${paper.status === 'read' ? 'selected' : ''}>Read</option>
+            </select>
+            <button onclick="showPaperDetails('${paper.id}')">Details</button>
+            <button onclick="deletePaper('${paper.id}')">Remove</button>
+        </div>
+    `;
+
+    return card;
+}
+
+function showPaperDetails(id) {
+    const paper = papers.find(p => p.id === id);
+    if (!paper) return;
+
+    const content = document.getElementById('paper-details-content');
+    content.innerHTML = `
+        <div class="form-group">
+            <label for="edit-title">Title</label>
+            <input type="text" id="edit-title" value="${paper.title}">
+        </div>
+        <div class="form-group">
+            <label for="edit-authors">Authors</label>
+            <input type="text" id="edit-authors" value="${paper.authors}">
+        </div>
+        <div class="form-group">
+            <label for="edit-year">Year</label>
+            <input type="number" id="edit-year" value="${paper.year}">
+        </div>
+        <div class="form-group">
+            <label for="edit-status">Status</label>
+            <select id="edit-status">
+                <option value="to-read" ${paper.status === 'to-read' ? 'selected' : ''}>To Read</option>
+                <option value="reading" ${paper.status === 'reading' ? 'selected' : ''}>Reading</option>
+                <option value="read" ${paper.status === 'read' ? 'selected' : ''}>Read</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="edit-topic">Topic</label>
+            <input type="text" id="edit-topic" value="${paper.topic}">
+        </div>
+        <div class="form-group">
+            <label for="edit-tags">Tags (comma separated)</label>
+            <div style="display: flex; gap: 0.5rem;">
+                <input type="text" id="edit-tags" value="${paper.tags ? paper.tags.join(', ') : ''}">
+                <div class="tag-dropdown">
+                    <button class="tag-dropdown-btn" onclick="toggleTagDropdown(this)">
+                        <span class="material-symbols-outlined">arrow_drop_down</span>
+                    </button>
+                    <div class="tag-dropdown-content" id="tag-dropdown">
+                        ${Array.from(allTags).sort().map(tag => `
+                            <div class="tag-dropdown-item" onclick="addTagToInput('${tag}')">${tag}</div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="edit-link">Paper URL</label>
+            <input type="text" id="edit-link" value="${paper.link || ''}" placeholder="https://example.com/paper.pdf">
+        </div>
+        <div class="form-group">
+            <label for="edit-notes">Notes</label>
+            <textarea id="edit-notes">${paper.notes || ''}</textarea>
+        </div>
+        <div style="margin-top: 1rem;">
+            <button onclick="savePaperDetails('${paper.id}')" style="padding: 0.5rem 1rem;">Save Changes</button>
+        </div>
+    `;
+
+    document.getElementById('paper-details-modal').style.display = 'flex';
+}
+
+function toggleTagDropdown(button) {
+    const buttonElement = button.closest('.tag-dropdown-btn');
+    if (!buttonElement) return;
+    
+    const dropdown = buttonElement.nextElementSibling;
+    dropdown.classList.toggle('show');
+    
+    event.stopPropagation();
+}
+
+function addTagToInput(tag) {
+    const tagsInput = document.getElementById('edit-tags');
+    const currentTags = tagsInput.value ? tagsInput.value.split(',').map(t => t.trim()) : [];
+    
+    if (!currentTags.includes(tag)) {
+        if (tagsInput.value) {
+            tagsInput.value += `, ${tag}`;
+        } else {
+            tagsInput.value = tag;
+        }
+    }
+    
+    document.querySelectorAll('.tag-dropdown-content').forEach(dropdown => {
+        dropdown.classList.remove('show');
+    });
+}
+
+window.onclick = function(event) {
+    if (!event.target.matches('.tag-dropdown-btn')) {
+        document.querySelectorAll('.tag-dropdown-content').forEach(dropdown => {
+            dropdown.classList.remove('show');
+        });
+    }
+}
+
+function closeModal() {
+    document.getElementById('paper-details-modal').style.display = 'none';
+}
+
+function savePaperDetails(id) {
+    const paperIndex = papers.findIndex(p => p.id === id);
+    if (paperIndex === -1) return;
+
+    papers[paperIndex] = {
+        ...papers[paperIndex],
+        title: document.getElementById('edit-title').value,
+        authors: document.getElementById('edit-authors').value,
+        year: parseInt(document.getElementById('edit-year').value) || new Date().getFullYear(),
+        status: document.getElementById('edit-status').value, 
+        topic: document.getElementById('edit-topic').value,
+        tags: document.getElementById('edit-tags').value ? 
+             document.getElementById('edit-tags').value.split(',').map(tag => tag.trim()).filter(tag => tag !== '') : [],
+        link: document.getElementById('edit-link').value,
+        notes: document.getElementById('edit-notes').value
+    };
+
+    updateTags();
+    updateTagSelector();
+    renderPapers();
+    
+    updateStatistics();
+    updateCounters();
+    
+    closeModal();
+}
+
+function addPaperToTopic(topic) {
+    const topicContainer = document.querySelector(`.topic-container[data-topic="${topic}"]`);
+    const existingForm = topicContainer.querySelector('.paper-form');
+
+    if (existingForm) {
+        topicContainer.removeChild(existingForm);
+        return;
+    }
+
+    const form = document.createElement('div');
+    form.className = 'paper-form';
+
+    form.innerHTML = `
+        <h4>Add New Paper</h4>
+        <div class="form-group">
+            <label for="paper-title">Title</label>
+            <input type="text" id="paper-title" placeholder="Paper Title" required>
+        </div>
+        <div class="form-group">
+            <label for="paper-authors">Authors</label>
+            <input type="text" id="paper-authors" placeholder="Authors">
+        </div>
+        <div class="form-group">
+            <label for="paper-year">Year</label>
+            <input type="number" id="paper-year" placeholder="Publication Year" min="1900" max="${new Date().getFullYear()}">
+        </div>
+        <div class="form-group">
+            <label for="paper-tags-new">Tags (comma separated)</label>
+            <div style="display: flex; gap: 0.5rem;">
+                <input type="text" id="paper-tags-new" placeholder="sample, research, etc">
+                <div class="tag-dropdown">
+                    <button class="tag-dropdown-btn" onclick="toggleTagDropdown(this)">
+                        <span class="material-symbols-outlined">arrow_drop_down</span>
+                    </button>
+                    <div class="tag-dropdown-content">
+                        ${Array.from(allTags).sort().map(tag => `
+                            <div class="tag-dropdown-item" onclick="addTagToNewPaperInput('${tag}')">${tag}</div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="paper-link">Paper URL</label>
+            <input type="text" id="paper-link" placeholder="https://example.com/paper.pdf">
+        </div>
+        <div class="form-buttons">
+            <button onclick="saveNewPaperToTopic('${topic}')">Save</button>
+            <button onclick="cancelAddPaper(this)">Cancel</button>
+        </div>
+    `;
+
+    topicContainer.appendChild(form);
+}
+
+function saveNewPaperToTopic(topic) {
+    markChangesUnsaved();
+    const titleInput = document.getElementById('paper-title');
+    const authorsInput = document.getElementById('paper-authors');
+    const yearInput = document.getElementById('paper-year');
+    const linkInput = document.getElementById('paper-link');
+    const tagsInput = document.getElementById('paper-tags-new');
+
+    if (!titleInput.value.trim()) {
+        alert("Paper title is required");
+        return;
+    }
+
+    const newPaper = {
+        id: generatePaperId(),
+        title: titleInput.value.trim(),
+        authors: (authorsInput.value || 'Unknown').trim(),
+        year: parseInt(yearInput.value) || new Date().getFullYear(),
+        link: linkInput.value.trim(),
+        tags: tagsInput.value ? 
+            tagsInput.value.split(',').map(tag => tag.trim()).filter(tag => tag) : [],
+        topic: topic,
+        status: 'to-read',
+        notes: '',
+        addedDate: new Date().toISOString() 
+    };
+
+    papers.push(newPaper);
+    
+    updateReadingStats();
+    
+    refreshUI();
+    
+    document.querySelector('.paper-form')?.remove();
+}
+
+
+function highlightStat(elementId) {
+    const el = document.getElementById(elementId);
+    el.classList.add('updated');
+    setTimeout(() => el.classList.remove('updated'), 500);
+}
+
+function updateReadingStats() {
+    const stats = {
+        total: papers.length,
+        toRead: papers.filter(p => p.status === 'to-read').length,
+        reading: papers.filter(p => p.status === 'reading').length,
+        read: papers.filter(p => p.status === 'read').length,
+        get progress() {
+            return this.total > 0 ? Math.round((this.read / this.total) * 100) : 0;
+        }
+    };
+
+    document.getElementById('total-papers').textContent = stats.total;
+    document.getElementById('to-read-counter').textContent = stats.toRead;
+    document.getElementById('papers-read').textContent = stats.read;
+    document.getElementById('reading-progress').textContent = `${stats.progress}%`;
+    
+    console.log('Stats updated:', stats);
+    return stats;
+}
+
+function refreshUI() {
+    updateTags();
+    updateTagSelector();
+    renderPapers();
+    updateReadingStats(); 
+}
+
+function generatePaperId() {
+    return 'PAPER-' + Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+}
+
+function updateAllComponents() {
+    updateTags();
+    updateTagSelector();
+    renderPapers();
+    updateStatistics(); 
+    updateCounters();
+}
+
+function addTagToNewPaperInput(tag) {
+    const tagsInput = document.getElementById('paper-tags-new');
+    const currentTags = tagsInput.value ? tagsInput.value.split(',').map(t => t.trim()) : [];
+    
+    if (!currentTags.includes(tag)) {
+        if (tagsInput.value) {
+            tagsInput.value += `, ${tag}`;
+        } else {
+            tagsInput.value = tag;
+        }
+    }
+    
+    document.querySelectorAll('.tag-dropdown-content').forEach(dropdown => {
+        dropdown.classList.remove('show');
+    });
+}
+
+function saveNewPaper(topic) {
+    const titleInput = document.getElementById('paper-title');
+    const authorsInput = document.getElementById('paper-authors');
+    const yearInput = document.getElementById('paper-year');
+    const linkInput = document.getElementById('paper-link');
+    const tagsInput = document.getElementById('paper-tags-new');
+
+    if (!titleInput.value) {
+        alert("Paper title is required");
+        return;
+    }
+
+    const newId = 'PAPER' + Math.random().toString(36).substr(2, 8).toUpperCase();
+
+    const newPaper = {
+        id: newId,
+        title: titleInput.value,
+        authors: authorsInput.value || 'Unknown',
+        year: yearInput.value ? parseInt(yearInput.value) : new Date().getFullYear(),
+        link: linkInput.value || '',
+        tags: tagsInput.value ? tagsInput.value.split(',').map(tag => tag.trim()) : [],
+        topic: topic,
+        status: 'to-read',
+        notes: ''
+    };
+
+    papers.push(newPaper);
+    
+    const form = document.querySelector('.paper-form');
+    if (form) form.remove();
+    
+    updateTags();
+    updateTagSelector();
+    renderPapers();
+    
+    updateStatistics();
+    updateCounters();
+    
+    console.log(`Added new paper "${titleInput.value}" (ID: ${newId})`);
+}
+
+function cancelAddPaper(button) {
+    const form = button.closest('.paper-form');
+    if (form) {
+        form.parentNode.removeChild(form);
+    }
+}
+
+function deletePaper(id) {
+    markChangesUnsaved();
+    if (confirm("Are you sure you want to remove this paper?")) {
+        papers = papers.filter(paper => paper.id !== id);
+        updateTags();
+        updateTagSelector();
+        renderPapers();
+        
+        updateStatistics();
+        updateCounters();
+    }
+}
+
+function updateStatus(id, status) {
+    markChangesUnsaved();
+    console.log(`Status update requested for ${id} to ${status}`);
+    
+    const paperIndex = papers.findIndex(p => p.id === id);
+    if (paperIndex === -1) {
+        console.error(`Paper ${id} not found!`);
+        return;
+    }
+
+    const oldStatus = papers[paperIndex].status;
+    papers[paperIndex].status = status;
+    console.log(`Changed paper ${id} from ${oldStatus} to ${status}`);
+
+    const paperCard = document.querySelector(`.paper-card[data-id="${id}"]`);
+    if (paperCard) {
+        paperCard.className = `paper-card ${status}`;
+    }
+
+    updateStatistics();
+    updateCounters();
+    
+    console.log("Statistics should be updated now");
+}
+
+function updateCounters() {
+    const totalPapers = papers.length;
+    const readPapers = papers.filter(paper => paper.status === 'read').length;
+    
+    document.getElementById('paper-counter').textContent = `${totalPapers} Papers`;
+    document.getElementById('read-counter').textContent = `${readPapers} Read`;
+}
+
+function updateStatistics() {
+    const statusCounts = {
+        'to-read': 0,
+        'reading': 0,
+        'read': 0
+    };
+
+    papers.forEach(paper => {
+        statusCounts[paper.status]++;
+    });
+
+    const totalPapers = papers.length;
+    const readPapers = statusCounts['read'];
+    const progress = totalPapers > 0 ? Math.round((readPapers / totalPapers) * 100) : 0;
+
+    document.getElementById('total-papers').textContent = totalPapers;
+    document.getElementById('papers-read').textContent = readPapers;
+    document.getElementById('reading-progress').textContent = `${progress}%`;
+    
+    const toReadElement = document.getElementById('to-read-counter');
+    if (toReadElement) {
+        toReadElement.textContent = statusCounts['to-read'];
+    }
+}
+
+function startRenamingTopic(topicContainer, currentName) {
+    const topicHeader = topicContainer.querySelector('.topic-header');
+    const topicNameSpan = topicHeader.querySelector('.topic-name');
+    
+    const renameForm = document.createElement('div');
+    renameForm.className = 'rename-topic-form';
+    
+    const nameInput = document.createElement('input');
+    nameInput.type = 'text';
+    nameInput.className = 'topic-name-input';
+    nameInput.value = currentName;
+    
+    const saveButton = document.createElement('button');
+    saveButton.textContent = 'Save';
+    saveButton.onclick = () => {
+        const newName = nameInput.value.trim();
+        if (newName && newName !== currentName) {
+            renameTopic(topicContainer, currentName, newName);
+        }
+        topicNameSpan.style.display = 'inline';
+        topicHeader.removeChild(renameForm);
+    };
+    
+    const cancelButton = document.createElement('button');
+    cancelButton.textContent = 'Cancel';
+    cancelButton.onclick = () => {
+        topicNameSpan.style.display = 'inline';
+        topicHeader.removeChild(renameForm);
+    };
+    
+    renameForm.appendChild(nameInput);
+    renameForm.appendChild(saveButton);
+    renameForm.appendChild(cancelButton);
+    
+    topicNameSpan.style.display = 'none';
+    topicHeader.insertBefore(renameForm, topicNameSpan);
+    
+    nameInput.focus();
+}
+
+function renameTopic(topicContainer, oldName, newName) {
+    papers = papers.map(paper => {
+        if (paper.topic === oldName) {
+            return { ...paper, topic: newName };
+        }
+        return paper;
+    });
+    
+    topicContainer.dataset.topic = newName;
+    const topicNameSpan = topicContainer.querySelector('.topic-name');
+    topicNameSpan.textContent = newName;
+    
+    renderPapers();
+    
+    updateStatistics();
+    updateCounters();
+}
+
+function addNewTopic() {
+    const newTopicName = prompt("Enter a name for the new topic:");
+    if (!newTopicName) return;
+    
+    const existingTopics = [...new Set(papers.map(p => p.topic))];
+    if (existingTopics.includes(newTopicName)) {
+        alert(`Topic "${newTopicName}" already exists`);
+        return;
+    }
+    
+    window.newlyCreatedTopic = newTopicName;
+    
+    renderPapers();
+}
+
+function allowDrop(e) {
+    e.preventDefault();
+}
+
+function handleDrop(e) {
+    e.preventDefault();
+    const topic = e.target.closest('.topic-container').dataset.topic;
+    papers = papers.map(paper => 
+        paper.id === draggedPaperId ? { ...paper, topic } : paper
+    );
+    renderPapers();
+    draggedPaperId = null;
+}
+
+function applyTagFilter() {
+    selectedTags = new Set();
+    document.querySelectorAll('.tag-checkbox:checked').forEach(checkbox => {
+        selectedTags.add(checkbox.value);
+    });
+    
+    renderPapers(); 
+}
+
+function clearTagFilter() {
+    selectedTags = new Set();
+    document.querySelectorAll('.tag-checkbox').forEach(checkbox => {
+        checkbox.checked = false;
+    });
+    renderPapers();
+}
+
+function showNotification(message) {
+    const notification = document.createElement('div');
+    notification.className = 'notification';
+    notification.textContent = message;
+    notification.style.position = 'fixed';
+    notification.style.top = '20px';
+    notification.style.right = '20px';
+    notification.style.backgroundColor = '#4CAF50';
+    notification.style.color = 'white';
+    notification.style.padding = '15px';
+    notification.style.borderRadius = '5px';
+    notification.style.boxShadow = '0 2px 5px rgba(0,0,0,0.2)';
+    notification.style.zIndex = '1000';
+    notification.style.opacity = '0';
+    notification.style.transition = 'opacity 0.3s ease-in-out';
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.style.opacity = '1';
+    }, 10);
+    
+    setTimeout(() => {
+        notification.style.opacity = '0';
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 300);
+    }, 3000);
+}
+
+function generateSharableLink() {
+    const data = {
+        papers: papers
+    };
+
+    const encodedData = btoa(JSON.stringify(data));
+    const link = `${window.location.origin}${window.location.pathname}?data=${encodedData}`;
+
+    navigator.clipboard.writeText(link).then(() => {
+        showNotification("Sharable link copied to clipboard!");
+    }).catch(() => {
+        prompt("Copy this link to share your reading list:", link);
+    });
+}
+
+function loadFromSharableLink() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const encodedData = urlParams.get('data');
+
+    if (!encodedData) {
+        return false;
+    }
+
+    try {
+        const decodedData = JSON.parse(atob(encodedData));
+        
+        if (!decodedData || typeof decodedData !== 'object' || !Array.isArray(decodedData.papers)) {
+            console.error("Invalid data structure in sharable link");
+            return false;
+        }
+
+        papers = decodedData.papers;
+        updateTags();
+        updateTagSelector();
+        renderPapers();
+
+        return true;
+    } catch (error) {
+        console.error("Error loading from sharable link:", error);
+        return false;
+    }
+}
+
+function resetTracker() {
+    if (confirm("Are you sure you want to reset your reading tracker? This will clear all your papers and start fresh.")) {
+        papers = [];
+        
+        allTags = new Set();
+        selectedTags = new Set();
+        
+        window.newlyCreatedTopic = null;
+        
+        updateTags();
+        updateTagSelector();
+        
+        const topicColumns = document.getElementById('topic-columns');
+        topicColumns.innerHTML = '<div style="width: 100%; text-align: center; padding: 2rem; color: #6b7280;">No topics yet. Click "Add New Topic" to get started.</div>';
+        
+        updateCounters();
+        updateStatistics();
+        
+        if (window.history.replaceState) {
+            const newUrl = window.location.pathname;
+            window.history.replaceState({}, document.title, newUrl);
+        }
+    }
+}
+
+function initialize() {
+    if (!document.getElementById('cursor-tooltip')) {
+        const tooltip = document.createElement('div');
+        tooltip.id = 'cursor-tooltip';
+        tooltip.style.position = 'fixed';
+        tooltip.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+        tooltip.style.color = 'white';
+        tooltip.style.padding = '5px 10px';
+        tooltip.style.borderRadius = '4px';
+        tooltip.style.fontSize = '14px';
+        tooltip.style.zIndex = '1000';
+        tooltip.style.pointerEvents = 'none';
+        tooltip.style.display = 'none';
+        document.body.appendChild(tooltip);
+    }
+
+    document.getElementById('search').addEventListener('input', renderPapers);
+    document.getElementById('status-filter').addEventListener('change', renderPapers);
+    
+    document.getElementById('tag-search-input').addEventListener('input', (e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        document.querySelectorAll('.tag-label').forEach(label => {
+            const tag = label.textContent.toLowerCase();
+            label.parentNode.style.display = tag.includes(searchTerm) ? 'block' : 'none';
+        });
+    });
+
+    document.addEventListener('change', function(e) {
+        if (e.target.classList.contains('tag-checkbox')) {
+            applyTagFilter();
+        }
+    });
+
+    const loadedFromLink = loadFromSharableLink();
+    if (!loadedFromLink) initializePapers();
+}
+
+let hasUnsavedChanges = false;
+
+function setupUnsavedChangesWarning() {
+    window.addEventListener('beforeunload', (e) => {
+        if (!hasUnsavedChanges) return;
+        
+        e.preventDefault();
+        e.returnValue = '';  
+        return ''; 
+    });
+}
+
+function markChangesUnsaved() {
+    hasUnsavedChanges = true;
+    document.body.classList.add('unsaved');
+}
+
+function markChangesSaved() {
+    hasUnsavedChanges = false;
+    document.body.classList.remove('unsaved');
+}
+
+document.addEventListener('DOMContentLoaded', setupUnsavedChangesWarning);
+
+document.addEventListener('DOMContentLoaded', initialize);
+</script>
+</body>
+</html>
